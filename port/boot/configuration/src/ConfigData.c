@@ -206,7 +206,28 @@ void load_boot_DevConfig_from_storage(void)
       dev_config.serial_option.uart_interface = get_uart_if_sel_pin();
     }
 
-    if ((dev_config.network_common.mac[0] == 0xFF))
+    uint8_t temp;
+    bool mac_valid = false;
+    ret = i2c_read_blocking_until(EEPROM_I2C_INSTANCE, EEPROM_I2C_ADDR, &temp, 1, false, make_timeout_time_ms(100));
+    if (ret > 0) {
+        // read MAC address from EEPROM
+        temp = 0xfa;
+        ret = i2c_write_blocking(EEPROM_I2C_INSTANCE, EEPROM_I2C_ADDR, &temp, 1, true);
+        if (ret == 1) {
+            ret = i2c_read_blocking(EEPROM_I2C_INSTANCE, EEPROM_I2C_ADDR, mac, 6, false);
+            if (ret == 6) {
+                if (!((mac[0]==0 && mac[1]==0 && mac[2]==0) || (mac[0]==0xff && mac[1]==0xff && mac[2]==0xff))) {
+                    // we got what's probably a valid MAC address
+                    for (int vi = 0; vi < 6; vi++) {
+                        dev_config.network_common.mac[vi] = mac[vi];
+                    }
+                    mac_valid = true;
+                }
+            }
+        }
+    }
+
+    if (!mac_valid)
     {
       dev_config.network_common.mac[0] = 0x00;
       dev_config.network_common.mac[1] = 0x08;
@@ -376,6 +397,29 @@ void check_mac_address(void)
     uint8_t buf[12], vt, temp;
     uint32_t vi, vj;
     uint8_t temp_buf[] = "INPUT MAC ? ";
+
+    ret = i2c_read_blocking_until(EEPROM_I2C_INSTANCE, EEPROM_I2C_ADDR, &temp, 1, false, make_timeout_time_ms(100));
+    if (ret > 0) {
+        // read MAC address from EEPROM
+        temp = 0xfa;
+        ret = i2c_write_blocking(EEPROM_I2C_INSTANCE, EEPROM_I2C_ADDR, &temp, 1, true);
+        if (ret == 1) {
+            ret = i2c_read_blocking(EEPROM_I2C_INSTANCE, EEPROM_I2C_ADDR, mac, 6, false);
+            if (ret == 6) {
+                if (!((mac[0]==0 && mac[1]==0 && mac[2]==0) || (mac[0]==0xff && mac[1]==0xff && mac[2]==0xff))) {
+                    // we got what's probably a valid MAC address
+                    for (vi = 0; vi < 6; vi++) {
+                        dev_config->network_common.mac[vi] = mac[vi];
+                    }
+                    sprintf((char *)dev_config->device_option.device_alias, "%s-%02X%02X%02X%02X%02X%02X",
+                                                       dev_config->device_common.device_name,
+                                                       mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);                    
+                    return;
+                }
+            }
+        }
+        // errors, will fall through to manual entry of MAC address
+    }
 
     if (dev_config->network_common.mac[0] != 0x00 || dev_config->network_common.mac[1] != 0x08 || dev_config->network_common.mac[2] != 0xDC)
     {

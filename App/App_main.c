@@ -75,7 +75,9 @@ int main(void)
     load_DevConfig_from_storage();
 
     DATA0_UART_Configuration();
+    LED_On(LED3);
     check_mac_address();
+    LED_Off(LED3);
     set_W5X00_NetTimeout();
     DATA0_UART_Interrupt_Enable();
     Timer_Configuration();

@@ -63,14 +63,20 @@ typedef enum {RESET = 0, SET = !RESET} FlagStatus, ITStatus;
   // UART0
   #define UART0_TX_PIN      0
   #define UART0_RX_PIN      1
-  #define UART0_CTS_PIN     2
-  #define UART0_RTS_PIN     3
+  //#define UART0_CTS_PIN     2
+  //#define UART0_RTS_PIN     3
 
   // UART1
   #define DATA0_UART_TX_PIN      4
   #define DATA0_UART_RX_PIN      5
   #define DATA0_UART_CTS_PIN     6
   #define DATA0_UART_RTS_PIN     7
+
+  // I2C EEPROM
+  #define EEPROM_I2C_SDA_PIN     2
+  #define EEPROM_I2C_SCL_PIN     3
+  #define EEPROM_I2C_INSTANCE    i2c1
+  #define EEPROM_I2C_ADDR        0x50
 
   #define BOOT_MODE_PIN          13
   #define FAC_RSTn_PIN           28

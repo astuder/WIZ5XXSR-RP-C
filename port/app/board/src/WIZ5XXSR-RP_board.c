@@ -52,6 +52,13 @@ void RP2040_Board_Init(void)
     // STATUS #1 : PHY link status (LED_0)
     // STATUS #2 : TCP connection status (LED_1)
     LED_Init(LED3);
+
+    // Initialize I2C for EEPROM with MAC address
+    i2c_init(EEPROM_I2C_INSTANCE, 100 * 1000);
+    gpio_set_function(EEPROM_I2C_SDA_PIN, GPIO_FUNC_I2C);
+    gpio_set_function(EEPROM_I2C_SCL_PIN, GPIO_FUNC_I2C);
+    gpio_pull_up(EEPROM_I2C_SDA_PIN);
+    gpio_pull_up(EEPROM_I2C_SCL_PIN);
 }
 
 uint8_t get_phylink(void)

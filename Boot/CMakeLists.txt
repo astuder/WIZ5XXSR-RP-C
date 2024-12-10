@@ -13,6 +13,7 @@ target_link_libraries(${TARGET_NAME} PRIVATE
         hardware_flash
         hardware_structs
         hardware_spi
+        hardware_i2c
         ETHERNET_FILES
         BOOT_IOLIBRARY_FILES
         DHCP_FILES

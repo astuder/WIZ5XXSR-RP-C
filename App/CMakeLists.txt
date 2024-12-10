@@ -13,6 +13,7 @@ target_link_libraries(${TARGET_NAME} PRIVATE
         hardware_flash
         hardware_structs
         hardware_spi
+        hardware_i2c
         ETHERNET_FILES
         APP_IOLIBRARY_FILES
         MQTT_FILES
@@ -43,6 +44,7 @@ target_link_libraries(${TARGET_NAME_LINKER} PRIVATE
         hardware_flash
         hardware_structs
         hardware_spi
+        hardware_i2c
         ETHERNET_FILES
         APP_IOLIBRARY_FILES
         MQTT_FILES

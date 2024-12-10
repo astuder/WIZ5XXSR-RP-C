@@ -19,6 +19,7 @@ target_link_libraries(APP_IOLIBRARY_FILES PRIVATE
         hardware_flash
         hardware_resets
         hardware_spi
+        hardware_i2c
         hardware_dma
         hardware_clocks
         DHCP_FILES
@@ -64,6 +65,7 @@ target_link_libraries(MBEDTLS_FILES PRIVATE
         hardware_flash
         hardware_resets
         hardware_spi
+        hardware_i2c        
         DNS_FILES
         DHCP_FILES
         ETHERNET_FILES
@@ -102,6 +104,7 @@ target_link_libraries(MODBUS_FILES PRIVATE
         hardware_flash
         hardware_resets
         hardware_spi
+        hardware_i2c        
         DNS_FILES
         DHCP_FILES
         ETHERNET_FILES
@@ -153,6 +156,7 @@ target_link_libraries(APP_S2E_FILES PRIVATE
         hardware_flash
         hardware_resets
         hardware_spi
+        hardware_i2c        
         DNS_FILES
         DHCP_FILES
         ETHERNET_FILES
@@ -163,4 +167,15 @@ target_link_libraries(APP_S2E_FILES PRIVATE
         mbedcrypto
         mbedx509
         mbedtls
+        )
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
+
+add_compile_options(
+        -Wall
+        -Wno-format          # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int
+        -Wno-unused-function # we have some for the docs that aren't called
+        -Wno-maybe-uninitialized
+        -Wno-array-parameter
         )
